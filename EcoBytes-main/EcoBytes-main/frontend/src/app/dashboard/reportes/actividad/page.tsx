@@ -84,7 +84,11 @@ async function downloadExcel(data: ActivityData) {
   };
 
   /* Agrega una fila de sección (encabezado de bloque) */
-  const addSection = (title: string, rowNum: number, color = SLATE_M) => {
+  const addSection = (
+  title: string,
+  rowNum: number,
+  color: string
+) => {
     ws1.mergeCells(`A${rowNum}:B${rowNum}`);
     const cell = ws1.getCell(`A${rowNum}`);
     cell.value = title;
@@ -95,7 +99,7 @@ async function downloadExcel(data: ActivityData) {
   };
 
   // Sección: información del reporte
-  addSection('INFORMACIÓN DEL REPORTE', 4);
+  addSection('INFORMACIÓN DEL REPORTE', 4, SLATE_M);
   addInfo('Fecha de generación', dateStr, false);
   addInfo('Sistema', 'EcoBytes · Módulo de Reportes', true);
   addInfo('Normativa aplicable', 'Ley REP 20.920 · Ministerio del Medio Ambiente', false);
