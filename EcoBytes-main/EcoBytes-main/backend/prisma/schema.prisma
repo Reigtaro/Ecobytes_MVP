@@ -1,0 +1,139 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "windows", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  name      String   @db.VarChar(255)
+  roleId    Int?     @map("role_id")
+  active    Boolean  @default(true)
+  timezone  String?  @db.VarChar(50)
+  avatarUrl String?  @db.VarChar(500) @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  role                Role?                @relation(fields: [roleId], references: [id], onDelete: SetNull)
+  accountActionTokens AccountActionToken[]
+
+  @@map("users")
+}
+
+model PendingVerification {
+  id             Int      @id @default(autoincrement())
+  email          String   @db.VarChar(255)
+  hashedCode     String   @db.VarChar(255) @map("hashed_code")
+  name           String   @db.VarChar(255)
+  hashedPassword String   @db.VarChar(255) @map("hashed_password")
+  timezone       String?  @db.VarChar(50)
+  attempts       Int      @default(0)
+  expiresAt      DateTime @map("expires_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@index([email])
+  @@index([expiresAt])
+  @@map("pending_verifications")
+}
+
+enum AccountActionType {
+  DEACTIVATE
+  REACTIVATE
+  RESET_PASSWORD
+}
+
+model AccountActionToken {
+  id          Int               @id @default(autoincrement())
+  userId      Int               @map("user_id")
+  email       String            @db.VarChar(255)
+  hashedToken String            @db.VarChar(255) @map("hashed_token")
+  action      AccountActionType
+  expiresAt   DateTime          @map("expires_at")
+  usedAt      DateTime?         @map("used_at")
+  createdAt   DateTime          @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([email, action])
+  @@index([expiresAt])
+  @@map("account_action_tokens")
+}
+
+model Role {
+  id             Int      @id @default(autoincrement())
+  name           String   @unique @db.VarChar(100)
+  description    String?  @db.VarChar(255)
+  sessionTimeout Int      @default(15) @map("session_timeout")
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  users       User[]
+  permissions RolePermission[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.VarChar(100)
+  description String?  @db.VarChar(255)
+  menu        String   @db.VarChar(100)
+  submenu     String   @db.VarChar(100)
+  menuOrder   Int      @default(0) @map("menu_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  roles RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       Int @map("role_id")
+  permissionId Int @map("permission_id")
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+// ── Puntos de Recolección ─────────────────────────────────────────────────────
+
+model CollectionPoint {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(200)
+  address    String   @db.VarChar(400)
+  city       String?  @db.VarChar(100)
+  region     String?  @db.VarChar(100)
+  latitude   Decimal  @db.Decimal(10, 7)
+  longitude  Decimal  @db.Decimal(10, 7)
+  commune    String?  @db.VarChar(100)
+  type       String?  @db.VarChar(100)
+  materials  String?  @db.VarChar(500) // JSON array: ["metal","phone","power_bank"]
+  contact    String?  @db.VarChar(200)
+  website    String?  @db.VarChar(500)
+  source     String   @default("manual") @db.VarChar(20) // "manual" | "mma"
+  syncedAt   DateTime? @map("synced_at")
+  editedAt   DateTime? @map("edited_at") // set when manually edited — protects from sync overwrite
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([region])
+  @@index([source])
+  @@map("collection_points")
+}
+
+model SearchLog {
+  id        Int      @id @default(autoincrement())
+  query     String?  @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("search_logs")
+}

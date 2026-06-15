@@ -1,0 +1,355 @@
+@import "tailwindcss";
+
+/* Configurar dark mode por clase */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ────────────────────────────────────────────
+   Animaciones
+──────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(100%); }
+}
+
+@keyframes toastProgress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 var(--brand-glow-none); }
+  50% { box-shadow: 0 0 12px 2px var(--brand-glow); }
+}
+
+/* ────────────────────────────────────────────
+   Clases de animación
+──────────────────────────────────────────── */
+.animate-fadeIn        { animation: fadeIn 150ms ease-out; }
+.animate-scaleIn       { animation: scaleIn 150ms ease-out; }
+.animate-slideIn       { animation: slideIn 200ms ease-out; }
+.animate-slideOut      { animation: slideOut 150ms ease-in; }
+.animate-toast-progress { animation: toastProgress linear forwards; }
+.animate-spin          { animation: spin 1s linear infinite; }
+
+/* ────────────────────────────────────────────
+   Tokens de color del sistema
+──────────────────────────────────────────── */
+:root {
+  /* Acento (color de marca) */
+  --accent:        #3D52A0;
+  --accent-hover:  #2C3E80;
+  --accent-subtle: rgba(61, 82, 160, 0.08);
+  --accent-light:  #3d52a09a;
+  --accent-bg:     rgba(61, 82, 160, 0.10);
+  --accent-bg-muted: rgba(61, 82, 160, 0.06);
+  --particle-rgb:    0,168, 122;
+
+  /* Secundario / Info */
+  --info: #4FC3F7;
+
+  /* Estados (iguales en ambos modos) */
+  --success: #00A87A;
+  --warning: #F5C842;
+  --error:   #EF4444;
+
+  /* Botones del header */
+  --btn-header:       #00A87A;
+  --btn-header-hover: #008F68;
+
+  /* Fondos */
+  --bg-app:      #EDF2FB;
+  --bg-header:   #E0E9F8;
+  --bg-surface:  #FFFFFF;
+  --bg-elevated: #F5F8FF;
+  --bg-input:    #EDF2FB;
+  --bg-muted:    #F1F5F9;
+
+  /* Bordes */
+  --border-default: #C8D6EE;
+  --border-input:   #BCC9E4;
+
+  /* Textos */
+  --text-primary:   #1E2B4A;
+  --text-secondary: #4A5E80;
+  --text-muted:     #8A9EC0;
+  --text-label:     #5A6A90;
+  --placeholder:    #AAB8D0;
+
+  /* Sidebar (siempre oscuro) */
+  --sidebar-bg:     #111115;
+  --sidebar-border: rgba(255, 255, 255, 0.055);
+
+  /* Sombras */
+  --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+
+  /* Decorativos / Glows */
+  --login-glow:      radial-gradient(ellipse 70% 55% at 90% 90%, rgba(34, 197, 94, 0.05) 0%, transparent 60%),
+                     radial-gradient(ellipse 50% 40% at 10% 10%, rgba(46, 125, 50, 0.04) 0%, transparent 60%);
+  --gradient-accent: rgba(46, 125, 50, 0.2);
+  --gradient-info:   rgba(79, 195, 247, 0.1);
+  --brand-glow:      rgba(46, 125, 50, 0.15);
+  --brand-glow-none: rgba(46, 125, 50, 0);
+  --success-bg:      rgba(34, 197, 94, 0.08);
+  --success-border:  rgba(34, 197, 94, 0.2);
+  --error-bg:        rgba(239, 68, 68, 0.08);
+  --error-border:    rgba(239, 68, 68, 0.25);
+  --warning-bg:      rgba(245, 158, 11, 0.08);
+  --warning-border:  rgba(245, 158, 11, 0.25);
+}
+
+.dark {
+  /* Acento — más claro para visibilidad en fondo oscuro */
+  --accent:        #7C9EFF;
+  --accent-hover:  #9AB4FF;
+  --accent-subtle: rgba(124, 158, 255, 0.08);
+  --accent-light:  #7C9EFF9a; 
+  --accent-bg:     rgba(124, 158, 255, 0.10);
+  --accent-bg-muted: rgba(124, 158, 255, 0.06);
+  --particle-rgb:    45, 219, 168;
+
+  /* Info */
+  --info: #4FC3F7;
+
+  /* Estados */
+  --success: #2DDBA8;
+  --warning: #F5C842;
+  --error:   #EF4444;
+
+  /* Botones del header */
+  --btn-header:       #2DDBA8;
+  --btn-header-hover: #22C496;
+
+  /* Fondos */
+  --bg-app:      #141B2D;
+  --bg-header:   #0E1422;
+  --bg-surface:  #1C2640;
+  --bg-elevated: #243050;
+  --bg-input:    #1A2238;
+  --bg-muted:    #0A1220;
+
+  /* Bordes */
+  --border-default: #2A3A58;
+  --border-input:   #1E3050;
+
+  /* Textos */
+  --text-primary:   #C0CFF0;
+  --text-secondary: #7A9ACA;
+  --text-muted:     #4A6090;
+  --text-label:     #6A88B8;
+  --placeholder:    #3A5278;
+
+  /* Sidebar */
+  --sidebar-bg:     #0A1220;
+  --sidebar-border: rgba(255, 255, 255, 0.055);
+
+  /* Sombras */
+  --card-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.04);
+
+  /* Decorativos */
+  --login-glow:      radial-gradient(ellipse 70% 55% at 90% 90%, rgba(34, 197, 94, 0.09) 0%, transparent 60%),
+                     radial-gradient(ellipse 50% 40% at 10% 10%, rgba(46, 125, 50, 0.06) 0%, transparent 60%);
+  --gradient-accent: rgba(102, 187, 106, 0.2);
+  --gradient-info:   rgba(79, 195, 247, 0.1);
+  --brand-glow:      rgba(102, 187, 106, 0.15);
+  --brand-glow-none: rgba(102, 187, 106, 0);
+  --success-bg:      rgba(34, 197, 94, 0.1);
+  --success-border:  rgba(34, 197, 94, 0.3);
+  --error-bg:        rgba(239, 68, 68, 0.1);
+  --error-border:    rgba(239, 68, 68, 0.3);
+  --warning-bg:      rgba(245, 158, 11, 0.1);
+  --warning-border:  rgba(245, 158, 11, 0.3);
+}
+
+/* ────────────────────────────────────────────
+   Theme mapping para Tailwind (responsive — usa CSS vars)
+──────────────────────────────────────────── */
+@theme inline {
+  /* Fondos */
+  --color-background: var(--bg-app);
+  --color-header:     var(--bg-header);
+  --color-surface:    var(--bg-surface);
+  --color-elevated:   var(--bg-elevated);
+  --color-input:      var(--bg-input);
+  --color-canvas:     var(--bg-muted);
+
+  /* Textos */
+  --color-foreground: var(--text-primary);
+  --color-secondary:  var(--text-secondary);
+  --color-muted:      var(--text-muted);
+  --color-label:      var(--text-label);
+
+  /* Bordes */
+  --color-border: var(--border-default);
+  --color-ring:   var(--border-input);
+
+  /* Acento */
+  --color-accent:        var(--accent);
+  --color-accent-hover:  var(--accent-hover);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-accent-light:  var(--accent-light);
+
+  /* Info */
+  --color-info: var(--info);
+
+  /* Header buttons */
+  --color-btn-header:       var(--btn-header);
+  --color-btn-header-hover: var(--btn-header-hover);
+
+  /* Sidebar */
+  --color-sidebar:        var(--sidebar-bg);
+  --color-sidebar-border: var(--sidebar-border);
+
+  /* Fuentes */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ────────────────────────────────────────────
+   Theme mapping para Tailwind (estático — colores de estado)
+──────────────────────────────────────────── */
+@theme {
+  /* Éxito */
+  --color-success:     #22C55E;
+  --color-success-50:  #F0FDF4;
+  --color-success-100: #DCFCE7;
+  --color-success-200: #BBF7D0;
+  --color-success-400: #4ADE80;
+  --color-success-500: #22C55E;
+  --color-success-600: #16A34A;
+  --color-success-700: #15803D;
+
+  /* Advertencia */
+  --color-warning:     #F59E0B;
+  --color-warning-50:  #FFFBEB;
+  --color-warning-100: #FEF3C7;
+  --color-warning-400: #FBBF24;
+  --color-warning-500: #F59E0B;
+  --color-warning-600: #D97706;
+
+  /* Error */
+  --color-error:     #EF4444;
+  --color-error-50:  #FEF2F2;
+  --color-error-100: #FEE2E2;
+  --color-error-400: #F87171;
+  --color-error-500: #EF4444;
+  --color-error-600: #DC2626;
+  --color-error-700: #B91C1C;
+}
+
+/* ────────────────────────────────────────────
+   Card background — usado en modals, cards, header
+──────────────────────────────────────────── */
+.card-bg {
+  background-color: var(--bg-surface);
+}
+.dark .card-bg {
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-surface) 100%);
+}
+
+/* ────────────────────────────────────────────
+   Base global
+──────────────────────────────────────────── */
+html {
+  font-size: 14px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ────────────────────────────────────────────
+   Scrollbar personalizado
+──────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.14);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.24);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* ────────────────────────────────────────────
+   Select / dropdown — fondo oscuro en dark mode
+──────────────────────────────────────────── */
+.dark select,
+.dark select option {
+  background-color: var(--bg-input);
+  color: var(--text-secondary);
+  color-scheme: dark;
+}
+
+.dark select:focus {
+  outline: none;
+}
+
+/* ────────────────────────────────────────────
+   Utilidades modernas
+──────────────────────────────────────────── */
+
+/* Glassmorphism */
+.glass {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+
+/* Borde sutil con gradiente (decorativo) */
+.border-gradient {
+  position: relative;
+}
+.border-gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--gradient-accent), var(--gradient-info));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
