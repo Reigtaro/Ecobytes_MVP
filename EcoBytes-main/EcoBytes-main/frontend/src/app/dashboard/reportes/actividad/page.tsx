@@ -87,7 +87,7 @@ async function downloadExcel(data: ActivityData) {
   const addSection = (
   title: string,
   rowNum: number,
-  color: string
+  color: string = SLATE_M
 ) => {
     ws1.mergeCells(`A${rowNum}:B${rowNum}`);
     const cell = ws1.getCell(`A${rowNum}`);
